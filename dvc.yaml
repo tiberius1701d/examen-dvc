@@ -5,7 +5,8 @@ stages:
     - data/raw_data/raw.csv
     - src/data/split_data.py
     params:
-    - split
+    - params.yaml:
+      - split
     outs:
     - data/processed_data/X_train.csv
     - data/processed_data/X_test.csv
@@ -27,7 +28,8 @@ stages:
     - data/processed_data/y_train.csv
     - src/models/grid_search.py
     params:
-    - grid_search
+    - params.yaml:
+      - grid_search
     outs:
     - models/best_params.pkl
   train:
