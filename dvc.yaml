@@ -6,8 +6,7 @@ stages:
     - src/data/split_data.py
     - params.yaml
     params:
-    - params.yaml:
-      - split
+    - split
     outs:
     - data/processed_data/X_train.csv
     - data/processed_data/X_test.csv
@@ -30,8 +29,7 @@ stages:
     - src/models/grid_search.py
     - params.yaml
     params:
-    - params.yaml:
-      - grid_search
+    - grid_search
     outs:
     - models/best_params.pkl
   train:
