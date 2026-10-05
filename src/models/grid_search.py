@@ -2,20 +2,13 @@
 
 import joblib
 import pandas as pd
+import yaml
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import GridSearchCV
 
 PROCESSED_DATA_DIR = "data/processed_data"
 MODELS_DIR = "models"
-
-# Grid search parameters for Random Forest (common starting point)
-PARAM_GRID = {
-    "n_estimators": [100, 200, 300],
-    "max_depth": [None, 10, 20],
-    # The minimum number of training rows that must end up in a leaf.
-    # Higher values make the trees coarser and less prone to memorising noise.
-    "min_samples_leaf": [1, 2, 4],
-}
+PARAMS_PATH = "params.yaml"
 
 
 def load_training_data(data_dir):
@@ -27,13 +20,19 @@ def load_training_data(data_dir):
     return X_train, y_train
 
 
-def find_best_params(X_train, y_train):
+def load_params(path, section):
+    """Return one section of the parameter file."""
+    with open(path) as f:
+        return yaml.safe_load(f)[section]
+
+
+def find_best_params(X_train, y_train, param_grid, cv):
     """Perform grid search to find the best Random Forest parameters."""
     grid_search = GridSearchCV(
         estimator=RandomForestRegressor(random_state=42),
-        param_grid=PARAM_GRID,
+        param_grid=param_grid,
         scoring="neg_mean_squared_error",
-        cv=5,
+        cv=cv,
         n_jobs=-1,
     )
     grid_search.fit(X_train, y_train)
@@ -43,8 +42,14 @@ def find_best_params(X_train, y_train):
 
 if __name__ == "__main__":
     X_train, y_train = load_training_data(PROCESSED_DATA_DIR)
+    params = load_params(PARAMS_PATH, "grid_search")
 
-    best_params = find_best_params(X_train, y_train)
+    best_params = find_best_params(
+        X_train,
+        y_train,
+        param_grid=params["param_grid"],
+        cv=params["cv"],
+    )
     print(f"Best parameters found: {best_params}")
 
     params_path = f"{MODELS_DIR}/best_params.pkl"

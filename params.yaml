@@ -1,0 +1,12 @@
+split:
+  test_size: 0.2
+  random_state: 42
+
+grid_search:
+  cv: 5
+  param_grid:
+    n_estimators: [100, 200, 300]
+    max_depth: [null, 10, 20]
+    # The minimum number of training rows that must end up in a leaf.
+    # Higher values make the trees coarser and less prone to memorising noise.
+    min_samples_leaf: [1, 2, 4]

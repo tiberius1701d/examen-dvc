@@ -1,15 +1,23 @@
 """Split the raw data into training and test sets."""
 
 import pandas as pd
+import yaml
 from sklearn.model_selection import train_test_split
 
 RAW_DATA_DIR = "data/raw_data"
 PROCESSED_DATA_DIR = "data/processed_data"
+PARAMS_PATH = "params.yaml"
 
 
 def load_data(path):
     """Load data from a CSV file and return a pandas DataFrame."""
     return pd.read_csv(path)
+
+
+def load_params(path, section):
+    """Return one section of the parameter file."""
+    with open(path) as f:
+        return yaml.safe_load(f)[section]
 
 
 def check_data(df):
@@ -18,7 +26,7 @@ def check_data(df):
     assert not df.duplicated().any(), "Data contains duplicate rows"
 
 
-def get_train_test_split_data(df, test_size=0.2, random_state=42):
+def get_train_test_split_data(df, test_size, random_state):
     """Split the DataFrame into training and test sets."""
     X = df.drop(["date", "silica_concentrate"], axis=1)
     y = df["silica_concentrate"]
@@ -30,7 +38,12 @@ if __name__ == "__main__":
     df = load_data(f"{RAW_DATA_DIR}/raw.csv")
     check_data(df)
 
-    X_train, X_test, y_train, y_test = get_train_test_split_data(df)
+    params = load_params(PARAMS_PATH, "split")
+    X_train, X_test, y_train, y_test = get_train_test_split_data(
+        df,
+        test_size=params["test_size"],
+        random_state=params["random_state"],
+    )
     print(
         f"Split {len(df)} rows into {len(X_train)} training and {len(X_test)} test rows"
     )
