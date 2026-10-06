@@ -26,10 +26,10 @@ def load_params(path, section):
         return yaml.safe_load(f)[section]
 
 
-def find_best_params(X_train, y_train, param_grid, cv):
+def find_best_params(X_train, y_train, param_grid, cv, random_state):
     """Perform grid search to find the best Random Forest parameters."""
     grid_search = GridSearchCV(
-        estimator=RandomForestRegressor(random_state=42),
+        estimator=RandomForestRegressor(random_state=random_state),
         param_grid=param_grid,
         scoring="neg_mean_squared_error",
         cv=cv,
@@ -42,6 +42,7 @@ def find_best_params(X_train, y_train, param_grid, cv):
 
 if __name__ == "__main__":
     X_train, y_train = load_training_data(PROCESSED_DATA_DIR)
+    random_state = load_params(PARAMS_PATH, "random_state")
     params = load_params(PARAMS_PATH, "grid_search")
 
     best_params = find_best_params(
@@ -49,6 +50,7 @@ if __name__ == "__main__":
         y_train,
         param_grid=params["param_grid"],
         cv=params["cv"],
+        random_state=random_state,
     )
     print(f"Best parameters found: {best_params}")
 

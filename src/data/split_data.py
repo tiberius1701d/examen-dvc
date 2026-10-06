@@ -38,11 +38,12 @@ if __name__ == "__main__":
     df = load_data(f"{RAW_DATA_DIR}/raw.csv")
     check_data(df)
 
+    random_state = load_params(PARAMS_PATH, "random_state")
     params = load_params(PARAMS_PATH, "split")
     X_train, X_test, y_train, y_test = get_train_test_split_data(
         df,
         test_size=params["test_size"],
-        random_state=params["random_state"],
+        random_state=random_state,
     )
     print(
         f"Split {len(df)} rows into {len(X_train)} training and {len(X_test)} test rows"

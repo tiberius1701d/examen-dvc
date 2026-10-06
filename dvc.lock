@@ -9,17 +9,17 @@ stages:
       size: 333757
     - path: params.yaml
       hash: md5
-      md5: d29b32295f12f43293c4252320bef441
-      size: 324
+      md5: fa820bfaa6c0f7d88c3af5dd5895a06d
+      size: 323
     - path: src/data/split_data.py
       hash: md5
-      md5: 8914f2df51738281652501e32f4e2247
-      size: 1789
+      md5: ef649dcace552ffef26250556f071d36
+      size: 1839
     params:
       params.yaml:
+        random_state: 42
         split:
           test_size: 0.2
-          random_state: 42
     outs:
     - path: data/processed_data/X_test.csv
       hash: md5
@@ -74,12 +74,12 @@ stages:
       size: 25951
     - path: params.yaml
       hash: md5
-      md5: d29b32295f12f43293c4252320bef441
-      size: 324
+      md5: fa820bfaa6c0f7d88c3af5dd5895a06d
+      size: 323
     - path: src/models/grid_search.py
       hash: md5
-      md5: d331e2204e9cf5afdba9e7a157f40385
-      size: 1691
+      md5: 4ffaba9913b2494e293b33962be4a2ce
+      size: 1810
     params:
       params.yaml:
         grid_search:
@@ -97,6 +97,7 @@ stages:
             - 1
             - 2
             - 4
+        random_state: 42
     outs:
     - path: models/best_params.pkl
       hash: md5
@@ -117,10 +118,17 @@ stages:
       hash: md5
       md5: bae2f6729ed707a937a10fd5d1f6d49d
       size: 68
+    - path: params.yaml
+      hash: md5
+      md5: fa820bfaa6c0f7d88c3af5dd5895a06d
+      size: 323
     - path: src/models/train_model.py
       hash: md5
-      md5: 6dacf7bf02cb5885f90909b688a1b63f
-      size: 1227
+      md5: e6c0825a3f8b8e1c720b7c21302f394d
+      size: 1542
+    params:
+      params.yaml:
+        random_state: 42
     outs:
     - path: models/random_forest_model.pkl
       hash: md5

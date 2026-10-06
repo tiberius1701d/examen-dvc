@@ -6,6 +6,7 @@ stages:
     - src/data/split_data.py
     - params.yaml
     params:
+    - random_state
     - split
     outs:
     - data/processed_data/X_train.csv
@@ -29,6 +30,7 @@ stages:
     - src/models/grid_search.py
     - params.yaml
     params:
+    - random_state
     - grid_search
     outs:
     - models/best_params.pkl
@@ -39,6 +41,9 @@ stages:
     - data/processed_data/y_train.csv
     - models/best_params.pkl
     - src/models/train_model.py
+    - params.yaml
+    params:
+    - random_state
     outs:
     - models/random_forest_model.pkl
   evaluate:
